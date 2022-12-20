@@ -1,0 +1,141 @@
+openapi: 3.0.0
+servers:
+  - url: 'https://public.api.nexon.com/openapi/maplestory'
+info:
+  description: >-
+    게임 데이터의 일부를 외부에서 사용할 수 있는 형태로 Open API를 제공합니다. 이를 이용해 외부 개발자들이 넥슨 게임 데이터를
+    조회할 수 있는 창작 서비스를 만들고, 이를 유저들이 이용할 수 있습니다.
+  version: 1.0.0
+  title: Maplestory Open API
+  termsOfService: 'https://developers.nexon.com/maplestory/termsofservice'
+tags: []
+paths:
+  /v1/cube-use-results:
+    get:
+      summary: ''
+      description: ''
+      parameters:
+        - name: count
+          in: query
+          required: false
+          schema:
+            type: string
+            default: '10'
+          description: '한번에 가져오려는 결과의 갯수(최소 10, 최대 1000) Default value : 10'
+          allowEmptyValue: true
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 조회 날짜(KST) ex) 2022-01-01 cursor가 없는 경우 필수이며 cursor와 함께 사용할 수 없음.
+          allowEmptyValue: true
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 결과 페이지의 cursor. 응답의 next를 사용. date가 없는 경우 필수이며 date와 함께 사용할 수 없음.
+          allowEmptyValue: true
+      operationId: ''
+      responses:
+        '200':
+          description: Default response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CubeHistoryResponseDTO'
+components:
+  schemas:
+    CubeHistoryResponseDTO:
+      title: Cube History Response
+      description: 큐브히스토리 응답 정보
+      type: object
+      properties:
+        count:
+          type: integer
+          description: 결과 건 수
+          format: int64
+        cube_histories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CubeHistoryDTO'
+          description: 큐브 히스토리
+        next_cursor:
+          type: string
+          description: 페이징 처리를 위한 cursor
+    CubeHistoryDTO:
+      title: Cube History
+      description: 큐브히스토리 정보
+      type: object
+      properties:
+        id:
+          type: string
+          description: 큐브 사용 내역에 대한 고유 식별자
+        character_name:
+          type: string
+          description: 캐릭터이름
+        world_name:
+          type: string
+          description: 월드 이름
+        create_date:
+          type: string
+          description: 큐브 사용 날짜
+        cube_type:
+          type: string
+          description: 사용한 큐브
+        item_upgrade_result:
+          type: string
+          description: 큐브 사용 결과
+        miracle_time_flag:
+          type: string
+          description: 미라클 타임 적용 여부
+        item_equip_part:
+          type: string
+          description: 장비 분류
+        item_level:
+          type: integer
+          description: 장비 레벨
+        target_item:
+          type: string
+          description: 큐브를 사용한 장비
+        potential_option_grade:
+          type: string
+          description: 잠재능력 등급
+        additional_potential_option_grade:
+          type: string
+          description: 에디셔널 잠재능력 등급
+        before_potential_options:
+          $ref: '#/components/schemas/CubeResultOptionDTO'
+          description: 큐브사용전 잠재능력 옵션
+        before_additional_potential_options:
+          $ref: '#/components/schemas/CubeResultOptionDTO'
+          description: 큐브사용전 에디셔널 잠재능력 옵션
+        after_potential_options:
+          $ref: '#/components/schemas/CubeResultOptionDTO'
+          description: 큐브 사용 후 잠재능력 옵션
+        after_additional_potential_options:
+          $ref: '#/components/schemas/CubeResultOptionDTO'
+          description: 큐브 사용 후 에디셔널 잠재능력 옵션
+    CubeResultOptionDTO:
+      title: Cube Result Option
+      description: 큐브 결과 옵션 정보
+      type: object
+      properties:
+        value:
+          type: string
+          description: 옵션 이름
+        grade:
+          type: string
+          description: 옵션 등급
+
+  requestBodies: {}
+  securitySchemes:
+    API Key:
+      type: apiKey
+      name: Authorization
+      in: header
+  links: {}
+  callbacks: {}
+security:
+  - API Key: []
