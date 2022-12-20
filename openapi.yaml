@@ -131,11 +131,11 @@ components:
 
   requestBodies: {}
   securitySchemes:
-    API Key:
+    api-key:
       type: apiKey
       name: Authorization
       in: header
   links: {}
   callbacks: {}
 security:
-  - API Key: []
+  - api-key: []
